@@ -1,6 +1,7 @@
 package money.boku.transfers.account;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -14,7 +15,7 @@ public class Account {
     private final AtomicReference<BigDecimal> balance;
 
     public Account(UUID id, BigDecimal balance) {
-        this.id = id;
+        this.id = Objects.requireNonNull(id);
         this.balance = new AtomicReference<>(balance);
     }
 

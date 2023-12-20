@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -24,8 +25,8 @@ public class WithdrawalRequestWatcher {
     private final Queue<WithdrawalRequestRecord> queue = new ConcurrentLinkedQueue<>();
 
     public WithdrawalRequestWatcher(AccountDatastore accountDatastore, WithdrawalService withdrawalService) {
-        this.accountDatastore = accountDatastore;
-        this.withdrawalService = withdrawalService;
+        this.accountDatastore = Objects.requireNonNull(accountDatastore);
+        this.withdrawalService = Objects.requireNonNull(withdrawalService);
     }
 
     /**
@@ -53,6 +54,8 @@ public class WithdrawalRequestWatcher {
                 if (request == null) {
                     return;
                 }
+                // Hypothetically, if withdrawal requests can be removed from the withdrawal service,
+                // we might want not to fail here if request is not found but rather continue to go through the loop.
                 WithdrawalService.WithdrawalState requestState = withdrawalService.getRequestState(request.withdrawalId());
                 if (requestState == WithdrawalService.WithdrawalState.PROCESSING) {
                     queue.add(request);

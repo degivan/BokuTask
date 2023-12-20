@@ -5,6 +5,7 @@ import io.javalin.Javalin;
 import io.javalin.testtools.HttpClient;
 import io.javalin.testtools.JavalinTest;
 import okhttp3.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -15,7 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoneyAPIFunctionalTest {
-    Javalin app = Main.javalinApp();
+    private Javalin app;
+    @BeforeEach
+    public void setupJavalin() {
+        // Setting up javalin before each test ensures account/withdrawal request data is cleaned up between tests.
+        app = Main.javalinApp();
+    }
 
     @Test
     public void transferRequestBodyValidation() {
@@ -179,6 +185,9 @@ public class MoneyAPIFunctionalTest {
             }
             BigDecimal resultingDelta = withdrawAmount.multiply(BigDecimal.valueOf(successfulWithdrawals));
 
+            // Waits for WithdrawalRequestWatcher to run.
+            // Alternatively, can add method to WithdrawalRequestWatcher that would force it to go through the queue,
+            // but for the sake of one test it looks like an overkill.
             Thread.sleep(100);
 
             balanceResponse = client.get("/balance/%s".formatted(accountId));
@@ -189,9 +198,18 @@ public class MoneyAPIFunctionalTest {
     }
 
     @Test
+    public void withdrawalStateParamValidation() {
+        JavalinTest.test(app, (server, client) -> {
+            // javalin routing does not match path param, so it's 404 instead of 400
+            assertThat(client.get("/withdraw/%s/state".formatted("")).code()).isEqualTo(404);
+            assertThat(client.get("/withdraw/%s/state".formatted("non-uuid")).code()).isEqualTo(400);
+        });
+    }
+
+    @Test
     public void withdrawalStateNoWithdrawalFound() {
         JavalinTest.test(app, (server, client) -> {
-            assertThat(client.get("/withdraw/%s".formatted(UUID.randomUUID())).code()).isEqualTo(404);
+            assertThat(client.get("/withdraw/%s/state".formatted(UUID.randomUUID())).code()).isEqualTo(404);
         });
     }
 
@@ -207,7 +225,7 @@ public class MoneyAPIFunctionalTest {
     private static WithdrawalService.WithdrawalState waitWithdrawalFinalState(HttpClient client, WithdrawalRequestResponse withdrawRequestResponse, Response withdrawResponse, ObjectMapper objectMapper) throws IOException {
         WithdrawalService.WithdrawalState state = WithdrawalService.WithdrawalState.PROCESSING;
         while (state == WithdrawalService.WithdrawalState.PROCESSING) {
-            Response withdrawStateResponse = client.get("/withdraw/%s".formatted(withdrawRequestResponse.withdrawalId()));
+            Response withdrawStateResponse = client.get("/withdraw/%s/state".formatted(withdrawRequestResponse.withdrawalId()));
             assertThat(withdrawResponse.code()).isEqualTo(200);
             WithdrawalStateResponse withdrawalStateResponse = objectMapper.readValue(withdrawStateResponse.body().string(), WithdrawalStateResponse.class);
             state = withdrawalStateResponse.state();

@@ -5,6 +5,7 @@ import money.boku.transfers.account.AccountNotFoundException;
 import money.boku.transfers.account.NegativeBalanceRequestException;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -16,9 +17,9 @@ public class MoneyServiceImpl implements MoneyService {
     private final WithdrawalRequestWatcher withdrawalRequestWatcher;
 
     public MoneyServiceImpl(AccountDatastore accountDatastore, WithdrawalService withdrawalService, WithdrawalRequestWatcher withdrawalRequestWatcher) {
-        this.accountDatastore = accountDatastore;
-        this.withdrawalService = withdrawalService;
-        this.withdrawalRequestWatcher = withdrawalRequestWatcher;
+        this.accountDatastore = Objects.requireNonNull(accountDatastore);
+        this.withdrawalService = Objects.requireNonNull(withdrawalService);
+        this.withdrawalRequestWatcher = Objects.requireNonNull(withdrawalRequestWatcher);
     }
 
     @Override

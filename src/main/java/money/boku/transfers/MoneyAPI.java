@@ -14,12 +14,12 @@ import java.util.UUID;
 public class MoneyAPI {
     public static final String TRANSFER_PATH = "/transfer";
     public static final String WITHDRAW_PATH = "/withdraw";
-    public static final String WITHDRAWAL_STATE_PATH = "/withdraw/{id}";
+    public static final String WITHDRAWAL_STATE_PATH = "/withdraw/{id}/state";
 
     private final MoneyService moneyService;
 
     public MoneyAPI(MoneyService moneyService) {
-        this.moneyService = moneyService;
+        this.moneyService = Objects.requireNonNull(moneyService);
     }
 
 
@@ -31,14 +31,14 @@ public class MoneyAPI {
      * @throws AccountNotFoundException        when there's no sender or receiver account with specified account id
      */
     public void handleTransferRequest(@NotNull Context ctx) throws NegativeBalanceRequestException, AccountNotFoundException {
-        Transfer transfer = ctx.bodyValidator(Transfer.class)
+        Transfer transferRequest = ctx.bodyValidator(Transfer.class)
                 .check(t -> t.from() != null, "sender shouldn't be empty")
                 .check(t -> t.to() != null, "receiver shouldn't be empty")
                 // nothing will break if they are the same, but such operations are pointless
                 .check(t -> !Objects.equals(t.from(), t.to()), "sender should be different from receiver")
                 .check(t -> t.amount() != null && t.amount().signum() > 0, "amount is required and should be positive number")
                 .get();
-        moneyService.transfer(transfer.from(), transfer.to(), transfer.amount());
+        moneyService.transfer(transferRequest.from(), transferRequest.to(), transferRequest.amount());
     }
 
     /**
@@ -51,7 +51,7 @@ public class MoneyAPI {
     public void handleWithdrawRequest(@NotNull Context ctx) throws NegativeBalanceRequestException, AccountNotFoundException {
         WithdrawalRequest withdrawalRequest = ctx.bodyValidator(WithdrawalRequest.class)
                 .check(r -> r.accountId() != null, "sender shouldn't be empty")
-                .check(r -> r.withdrawalAddress() != null && !r.withdrawalAddress().isEmpty(), "")
+                .check(r -> r.withdrawalAddress() != null && !r.withdrawalAddress().isEmpty(), "withdrawal address shouldn't be empty")
                 .check(t -> t.amount() != null && t.amount().signum() > 0, "amount is required and should be positive number")
                 .get();
         WithdrawalService.Address withdrawalAddress = new WithdrawalService.Address(withdrawalRequest.withdrawalAddress());
@@ -66,7 +66,9 @@ public class MoneyAPI {
      * @throws WithdrawalNotFoundException when there's no withdrawal request with specified id
      */
     public void handleWithdrawalStateRequest(@NotNull Context ctx) throws WithdrawalNotFoundException {
-        String idStr = ctx.pathParam("id");
+        String idStr = ctx.pathParamAsClass("id", String.class)
+                .check(s -> s != null && !s.isEmpty(), "withdrawal id shouldn't be empty")
+                .get();
         WithdrawalService.WithdrawalId withdrawalId = new WithdrawalService.WithdrawalId(UUID.fromString(idStr));
         WithdrawalService.WithdrawalState state = moneyService.withdrawRequestState(withdrawalId);
         ctx.json(new WithdrawalStateResponse(state));

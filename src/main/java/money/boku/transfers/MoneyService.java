@@ -41,5 +41,4 @@ public interface MoneyService {
      * @throws WithdrawalNotFoundException if there's no withdrawal request with such id
      */
     WithdrawalService.WithdrawalState withdrawRequestState(WithdrawalService.WithdrawalId withdrawalId) throws WithdrawalNotFoundException;
-
 }

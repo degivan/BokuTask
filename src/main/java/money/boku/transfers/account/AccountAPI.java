@@ -4,6 +4,7 @@ import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -16,9 +17,14 @@ public class AccountAPI {
     private final AccountDatastore accountDatastore;
 
     public AccountAPI(AccountDatastore accountDatastore) {
-        this.accountDatastore = accountDatastore;
+        this.accountDatastore = Objects.requireNonNull(accountDatastore);
     }
 
+    /**
+     * Handles HTTP request to open new account.
+     *
+     * @param ctx request context
+     */
     public void handleOpenAccountRequest(@NotNull Context ctx) {
         String balanceStr = ctx.queryParam("initialBalance");
         if (balanceStr == null || balanceStr.isEmpty()) {
@@ -29,6 +35,12 @@ public class AccountAPI {
         ctx.result(account.getId().toString());
     }
 
+    /**
+     * Handles HTTP request to look at account balance.
+     *
+     * @param ctx request context
+     * @throws AccountNotFoundException if no account with such id exists
+     */
     public void handleBalanceRequest(@NotNull Context ctx) throws AccountNotFoundException {
         String accountIdStr = ctx.pathParam("accountId");
         UUID accountId = UUID.fromString(accountIdStr);

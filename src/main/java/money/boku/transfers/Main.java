@@ -10,6 +10,7 @@ import money.boku.transfers.account.*;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         try (Javalin javalin = javalinApp()) {
+            // Can be configurable
             javalin.start(7070);
             Thread.currentThread().join();
         }
@@ -36,7 +37,6 @@ public class Main {
         return Javalin.create(config -> {
                     config.http.prefer405over404 = true;
                 })
-                // Not part of the task, helps with testing.
                 .post(AccountAPI.OPEN_ACCOUNT_PATH, accountAPI::handleOpenAccountRequest)
                 .get(AccountAPI.BALANCE_PATH, accountAPI::handleBalanceRequest)
                 .post(MoneyAPI.TRANSFER_PATH, moneyAPI::handleTransferRequest)
