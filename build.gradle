@@ -1,0 +1,36 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'java'
+}
+
+group 'money.boku'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("io.javalin:javalin:5.6.3")
+    implementation("org.slf4j:slf4j-simple:2.0.7")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
+
+    testImplementation 'io.javalin:javalin-bundle:5.6.3'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    manifest {
+        attributes (
+            'Main-Class': 'money.boku.transfers.Main'
+        )
+    }
+}
