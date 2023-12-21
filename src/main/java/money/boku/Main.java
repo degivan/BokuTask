@@ -3,7 +3,6 @@ package money.boku;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 import money.boku.account.*;
-import money.boku.transfers.account.*;
 
 /**
  * Starts up the server.
