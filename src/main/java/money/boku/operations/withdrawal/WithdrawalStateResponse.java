@@ -1,4 +1,4 @@
-package money.boku;
+package money.boku.operations.withdrawal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

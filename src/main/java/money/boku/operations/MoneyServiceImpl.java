@@ -1,8 +1,11 @@
-package money.boku;
+package money.boku.operations;
 
 import money.boku.account.AccountDatastore;
 import money.boku.account.AccountNotFoundException;
 import money.boku.account.NegativeBalanceRequestException;
+import money.boku.operations.withdrawal.WithdrawalNotFoundException;
+import money.boku.operations.withdrawal.WithdrawalRequestWatcher;
+import money.boku.operations.withdrawal.WithdrawalService;
 
 import java.math.BigDecimal;
 import java.util.Objects;
