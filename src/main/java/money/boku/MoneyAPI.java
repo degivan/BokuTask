@@ -1,8 +1,8 @@
-package money.boku.transfers;
+package money.boku;
 
 import io.javalin.http.Context;
-import money.boku.transfers.account.AccountNotFoundException;
-import money.boku.transfers.account.NegativeBalanceRequestException;
+import money.boku.account.AccountNotFoundException;
+import money.boku.account.NegativeBalanceRequestException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

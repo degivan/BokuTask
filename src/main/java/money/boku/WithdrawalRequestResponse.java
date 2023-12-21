@@ -1,4 +1,4 @@
-package money.boku.transfers;
+package money.boku;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

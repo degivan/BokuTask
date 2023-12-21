@@ -1,8 +1,8 @@
-package money.boku.transfers;
+package money.boku;
 
-import money.boku.transfers.account.AccountDatastore;
-import money.boku.transfers.account.AccountNotFoundException;
-import money.boku.transfers.account.NegativeBalanceRequestException;
+import money.boku.account.AccountDatastore;
+import money.boku.account.AccountNotFoundException;
+import money.boku.account.NegativeBalanceRequestException;
 
 import java.math.BigDecimal;
 import java.util.Objects;

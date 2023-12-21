@@ -1,7 +1,7 @@
-package money.boku.transfers;
+package money.boku;
 
-import money.boku.transfers.account.AccountDatastore;
-import money.boku.transfers.account.AccountNotFoundException;
+import money.boku.account.AccountDatastore;
+import money.boku.account.AccountNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

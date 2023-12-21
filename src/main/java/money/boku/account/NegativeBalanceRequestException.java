@@ -1,4 +1,4 @@
-package money.boku.transfers.account;
+package money.boku.account;
 
 /**
  * Thrown when user transfer/withdrawal request can result in negative balance on the account.

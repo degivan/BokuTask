@@ -1,4 +1,4 @@
-package money.boku.transfers.account;
+package money.boku.account;
 
 /**
  * Thrown when there's no such account in the system.

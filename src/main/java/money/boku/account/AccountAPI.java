@@ -1,4 +1,4 @@
-package money.boku.transfers.account;
+package money.boku.account;
 
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package money.boku.transfers.account;
+package money.boku.account;
 
 import java.math.BigDecimal;
 import java.util.UUID;

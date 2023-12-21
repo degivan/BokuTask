@@ -1,4 +1,4 @@
-package money.boku.transfers;
+package money.boku;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -8,9 +8,9 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 // Changed imports here as original did not compile.
-import static money.boku.transfers.WithdrawalService.WithdrawalState.COMPLETED;
-import static money.boku.transfers.WithdrawalService.WithdrawalState.FAILED;
-import static money.boku.transfers.WithdrawalService.WithdrawalState.PROCESSING;
+import static money.boku.WithdrawalService.WithdrawalState.COMPLETED;
+import static money.boku.WithdrawalService.WithdrawalState.FAILED;
+import static money.boku.WithdrawalService.WithdrawalState.PROCESSING;
 
 interface WithdrawalService {
     /**
