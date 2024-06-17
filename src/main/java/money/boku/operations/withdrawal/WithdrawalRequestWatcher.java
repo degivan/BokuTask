@@ -1,4 +1,4 @@
-package money.boku;
+package money.boku.operations.withdrawal;
 
 import money.boku.account.AccountDatastore;
 import money.boku.account.AccountNotFoundException;
@@ -70,6 +70,6 @@ public class WithdrawalRequestWatcher {
         }, 0, 50, TimeUnit.MILLISECONDS); // can be configurable
     }
 
-    record WithdrawalRequestRecord(WithdrawalService.WithdrawalId withdrawalId, UUID from, BigDecimal amount) {
+    public record WithdrawalRequestRecord(WithdrawalService.WithdrawalId withdrawalId, UUID from, BigDecimal amount) {
     }
 }

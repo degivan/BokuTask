@@ -1,4 +1,4 @@
-package money.boku;
+package money.boku.operations.withdrawal;
 
 /**
  * Thrown when there's no such withdrawal request in the system.
